@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#070b1c" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="description"
+      content="Lumen Grove - grow a living grove of light and outlast the Blight. One thumb, instant restart."
+    />
+    <title>Lumen Grove</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+    <script type="module" crossorigin src="./assets/index-D1z2RLmB.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-ClzosAQ-.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage" aria-hidden="true"></div>
+
+      <!-- UI layer is repositioned to match the canvas rect exactly -->
+      <div id="ui">
+        <header id="hud" class="hud is-hidden">
+          <div class="hud-top">
+            <div class="score-block">
+              <div class="label">GROVE SCORE</div>
+              <div class="score" id="score">0</div>
+            </div>
+            <div class="night-block">
+              <div class="night" id="night">NIGHT 1</div>
+              <div class="phase" id="phase">PREPARE</div>
+            </div>
+            <div class="hud-right">
+              <div class="hearts" id="hearts" role="img" aria-label="hearts"></div>
+              <div class="buffs" id="buffs"></div>
+              <div class="best-line">BEST <b id="best">0</b></div>
+            </div>
+          </div>
+          <div class="combo" id="combo"></div>
+        </header>
+
+        <div id="banner" class="banner"></div>
+
+        <footer id="dock" class="dock is-hidden">
+          <div class="chip chip-bloom">
+            <span class="ico">&#10022;</span><b id="bloom">0</b><i id="income"></i>
+          </div>
+          <div class="hint" id="hint">Tap bare soil to plant a Sprout</div>
+          <button class="mend-btn" id="btn-mend" type="button" aria-label="mend the heart">
+            <span class="mend-heart">&#9825;</span><span id="mend-cost">180</span>
+          </button>
+          <button class="icon-btn" id="btn-sound" type="button" aria-label="toggle sound">♪</button>
+        </footer>
+
+        <section id="menu" class="overlay">
+          <div class="panel">
+            <div class="crest" aria-hidden="true">
+              <svg viewBox="0 0 64 64" width="58" height="58">
+                <defs>
+                  <radialGradient id="cg" cx="50%" cy="38%" r="60%">
+                    <stop offset="0%" stop-color="#b6ffe4" />
+                    <stop offset="55%" stop-color="#4fd6a8" />
+                    <stop offset="100%" stop-color="#1d6f63" />
+                  </radialGradient>
+                </defs>
+                <path d="M32 58V30" stroke="#6ff0c0" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M32 42c-10 0-16-6-16-14 8 0 14 3 16 10" fill="#2e9d80" opacity=".9" />
+                <path d="M32 36c9 0 15-5 15-13-8 0-13 3-15 9" fill="#3fbd97" opacity=".9" />
+                <circle cx="32" cy="18" r="10" fill="url(#cg)" />
+                <circle cx="29" cy="15" r="3" fill="#eafff6" opacity=".85" />
+              </svg>
+            </div>
+            <h1 class="title">LUMEN GROVE</h1>
+            <p class="tagline">Grow light. Outlast the dark.</p>
+
+            <!-- ============ TODAY'S GROVE (the hook) ============ -->
+            <button class="daily-card" id="daily-card" type="button">
+              <div class="daily-head">
+                <span class="daily-kicker">TODAY&rsquo;S GROVE</span>
+                <span class="daily-streak" id="daily-streak"></span>
+              </div>
+              <div class="daily-mod" id="daily-mod"></div>
+              <div class="daily-target" id="daily-target"></div>
+              <div class="daily-week" id="daily-week"></div>
+              <div class="daily-cta" id="daily-cta"></div>
+            </button>
+
+            <!-- ============ GROVE LEVEL ============ -->
+            <div class="level-card">
+              <div class="level-art" id="menu-tree"></div>
+              <div class="level-info">
+                <div class="level-kicker">GROVE LEVEL</div>
+                <div class="level-value" id="menu-level">1</div>
+                <div class="level-stage" id="menu-stage">Seed</div>
+                <div class="level-bar"><i id="menu-level-bar"></i></div>
+                <div class="level-next" id="menu-level-next"></div>
+              </div>
+            </div>
+
+            <!-- ============ THE GROVE PATH ============ -->
+            <button class="path-card" id="path-card" type="button">
+              <div class="path-head">
+                <span class="path-kicker">THE GROVE PATH</span>
+                <span class="path-count" id="path-count"></span>
+              </div>
+              <div class="path-next" id="path-next"></div>
+              <div class="level-bar"><i id="path-bar"></i></div>
+            </button>
+
+            <div class="statline">
+              <span>BEST <b id="menu-best">0</b></span>
+              <span class="dot"></span>
+              <span>NIGHTS <b id="menu-nights">0</b></span>
+              <span class="dot"></span>
+              <span class="sparks-inline"><span class="ico">&#10022;</span><b id="menu-sparks">0</b></span>
+            </div>
+
+            <button class="primary" id="btn-play" type="button">PLANT THE GROVE</button>
+            <button class="ghost-btn" id="btn-grove-open" type="button">THE GROVE &mdash; LEVEL UP</button>
+
+            <div class="how">
+              <p><b>1</b> Tap bare soil to plant. A plant only <i>burns</i> when it is rooted to the Seedheart.</p>
+              <p><b>2</b> The higher you build, the brighter it burns. Tall plants are strong but far from the heart.</p>
+              <p><b>3</b> Kills chain between neighbouring plants. Chains multiply everything.</p>
+              <p><b>4</b> Blight chews through your front line and strikes the heart. Three strikes and the grove falls.</p>
+            </div>
+
+            <div class="daily" id="sky-note"></div>
+          </div>
+        </section>
+
+        <!-- ============ THE GROVE (meta progression) ============ -->
+        <section id="grove" class="overlay is-hidden">
+          <div class="panel grove-panel">
+            <div class="grove-head">
+              <button class="icon-btn" id="btn-grove-back" type="button" aria-label="back">&#8249;</button>
+              <div class="grove-head-text">
+                <h2 class="grove-title">THE GROVE</h2>
+                <div class="grove-sub">
+                  LEVEL <b id="grove-level">1</b>
+                  <span class="dot"></span>
+                  <span id="grove-stage">Seed</span>
+                </div>
+              </div>
+              <div class="chip chip-bloom"><span class="ico">&#10022;</span><b id="grove-sparks">0</b></div>
+            </div>
+
+            <div class="grove-hero">
+              <div class="grove-art" id="grove-art"></div>
+              <div class="grove-reward" id="grove-reward"></div>
+              <div class="level-bar big"><i id="grove-bar"></i></div>
+              <div class="grove-next" id="grove-next"></div>
+            </div>
+
+            <div class="section-head">
+              <span>BRANCHES</span>
+              <span class="branch-hint">Sparks earned by playing &mdash; spend them to level a branch</span>
+            </div>
+            <div class="branches" id="branches"></div>
+
+            <div class="deepen is-hidden" id="deepen-wrap">
+              <button class="deepen-btn" id="btn-deepen" type="button">DEEPEN THE GROVE</button>
+              <p class="deepen-note" id="deepen-note"></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ THE GROVE PATH ============ -->
+        <section id="path" class="overlay is-hidden">
+          <div class="panel grove-panel">
+            <div class="grove-head">
+              <button class="icon-btn" id="btn-path-back" type="button" aria-label="back">&#8249;</button>
+              <div class="grove-head-text">
+                <h2 class="grove-title">THE GROVE PATH</h2>
+                <div class="grove-sub"><span id="path-sub"></span></div>
+              </div>
+              <div class="chip chip-bloom"><span class="ico">&#10022;</span><b id="path-sparks">0</b></div>
+            </div>
+            <div class="path-list" id="path-list"></div>
+          </div>
+        </section>
+
+        <section id="gameover" class="overlay is-hidden">
+          <div class="panel">
+            <h2 class="title small">THE DARK TOOK ROOT</h2>
+            <div class="final" id="final-score">0</div>
+            <div class="final-label">GROVE SCORE</div>
+            <div class="statline center" id="go-stats"></div>
+            <div class="level-progress" id="go-level"></div>
+            <div class="next-milestone" id="go-next"></div>
+            <div class="gain" id="go-gain"></div>
+            <button class="primary" id="btn-retry" type="button">REGROW</button>
+            <button class="ghost-btn" id="btn-grove" type="button">THE GROVE</button>
+          </div>
+        </section>
+      </div>
+
+      <div id="rotate-note" class="rotate-note">Rotate to portrait for the full grove.</div>
+    </div>
+
+  </body>
+</html>
