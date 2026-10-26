@@ -12,8 +12,13 @@ proves its difficulty curve is right.
 **Play the free demo:** https://hy5uvm1q5ywq8.space.minimax.io
 (installable on a phone — *Add to Home Screen*)
 
+**🧪 [Try the Difficulty Lab](https://lumen-grove-lab.vercel.app) — free, no install.**
+The real simulation running in your browser: sweep one difficulty constant,
+play the same three strategies, and read the curve. It tells you which of the
+three defects below your own curve has.
+
 **Get the source licence:** **https://gumroad.com/l/lumen-grove**
-— Personal $49 · Studio $149
+— Starter $29 · Personal $49 · Studio $149
 
 ![The menu](docs/images/menu.png)
 
